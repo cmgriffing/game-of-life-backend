@@ -1,0 +1,21 @@
+service:
+  name: game-of-life-handle-result
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dotenv-plugin # Load .env as environment variables
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: prod
+  region: us-west-2
+
+functions:
+  handleResult:
+    handler: handler.handleResult
+    events:
+      - http:
+          path: submit-result
+          method: post

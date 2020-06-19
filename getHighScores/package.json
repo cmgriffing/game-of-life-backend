@@ -1,0 +1,16 @@
+{
+  "name": "game-of-life-backend-get-high-scores",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sls": "../node_modules/.bin/serverless"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "mongodb": "^3.5.8"
+  }
+}

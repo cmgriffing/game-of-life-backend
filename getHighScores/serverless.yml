@@ -1,0 +1,29 @@
+service:
+  name: game-of-life-get-high-scores
+
+plugins:
+  - serverless-bundle # Package our functions with Webpack
+  - serverless-offline
+  - serverless-dotenv-plugin # Load .env as environment variables
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: prod
+  region: us-west-2
+
+  functions:
+    getHighScores:
+      handler: handler.getHighScores
+      events:
+        - http:
+            path: get-high-scores
+            method: get
+
+functions:
+  getHighScores:
+    handler: handler.getHighScores
+    events:
+      - http:
+          path: get-high-scores
+          method: get

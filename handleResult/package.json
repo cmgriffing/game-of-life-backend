@@ -1,0 +1,17 @@
+{
+  "name": "game-of-life-backend-handle-result",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "sls": "../node_modules/.bin/serverless"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "mongodb": "^3.5.8"
+  }
+}
