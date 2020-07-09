@@ -33,6 +33,10 @@ async function main() {
           submission,
         };
       })
+      .map((submission) => {
+        // placeholder for scrubbing awful user names
+        return submission;
+      })
       .map(async (submission) => {
         // validate results
         return new Promise((resolve, reject) => {
@@ -60,15 +64,31 @@ async function main() {
       })
   );
 
-  console.log({ submissionValidationResults });
+  console.log(
+    JSON.stringify(
+      submissionValidationResults.map((result) => {
+        const submission = result.submission.submission; //JSON.parse(result.submission);
+        console.log({ submission });
+        return {
+          valid: result.valid,
+          submission_id: result.submission_id,
+          active_count: submission.active_count,
+          step_count: submission.step_count,
+          // user_name: submission.user_name,
+        };
+      }),
+      undefined,
+      2
+    )
+  );
 
   // remove invalid submissions
   submissionValidationResults = submissionValidationResults.filter(
     (submission) => {
       if (!submission.valid) {
-        submissionCollection.deleteOne({
-          _id: { $eq: ObjectId(submission.submission_id) },
-        });
+        // submissionCollection.deleteOne({
+        //   _id: { $eq: ObjectId(submission.submission_id) },
+        // });
         return false;
       }
       return true;
@@ -87,7 +107,7 @@ async function main() {
     }
   );
 
-  console.log(JSON.stringify(submissionValidationResults));
+  // console.log(JSON.stringify(submissionValidationResults));
 
   // transfer valid submissions to high scores collection
   const insertResult = await highScoreCollection.insertMany(
@@ -95,18 +115,20 @@ async function main() {
   );
 
   if (insertResult) {
-    console.log("insert many result", insertResult);
-    const ids = submissionValidationResults.map((deleteResult) => {
-      // console.log({ deleteResult });
-      return ObjectId(deleteResult.submission_id);
-    });
+    // console.log("insert many result", insertResult);
+    const ids = submissionValidationResults
+      .filter((result) => result.valid)
+      .map((deleteResult) => {
+        // console.log({ deleteResult });
+        return ObjectId(deleteResult.submission_id);
+      });
     console.log({ ids });
     const deleteResult = await submissionCollection.deleteMany({
       _id: {
         $in: ids,
       },
     });
-    console.log({ deleteResult });
+    // console.log({ deleteResult });
   } else {
     console.log("No insert Result;");
   }

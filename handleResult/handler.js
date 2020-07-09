@@ -1,20 +1,42 @@
 const MongoClient = require("mongodb").MongoClient;
 const Joi = require("@hapi/joi");
 
+const Filter = require("cellulelife-bad-words");
+const filter = new Filter();
+
 const submissionSchema = Joi.object({
   game_state: Joi.object({
-    cellules: Joi.string(),
+    cellules: Joi.string().max(2000),
     active: Joi.boolean(),
     cellules_width: Joi.number(),
     cellules_height: Joi.number(),
   }),
-  step_count: Joi.number(),
-  active_count: Joi.number(),
-  modifications: Joi.array().items(
-    Joi.object({
-      step_index: Joi.number(),
-      grid_index: Joi.number(),
-    })
+  step_count: Joi.number().max(4001),
+  active_count: Joi.number().max(2000),
+  modifications: Joi.array()
+    .items(
+      Joi.object({
+        step_index: Joi.number(),
+        grid_index: Joi.number().max(2000),
+      })
+    )
+    .max(100),
+  user_name: Joi.string().max(4),
+  seed_label: Joi.string().valid(
+    "Bim",
+    "C",
+    "Coles",
+    "Cube",
+    "Diamond",
+    "Glider",
+    "hmm",
+    "Forty Two",
+    "Line",
+    "Ligma",
+    "Mr Sir",
+    "Pentadecathlon",
+    "Wall",
+    "Windmills"
   ),
 });
 
@@ -34,12 +56,22 @@ export const handleResult = async (event, context) => {
   // perform validation
   const submission = JSON.parse(event.body);
 
-  // insert result into db
-  await collection.insertOne(submission);
+  const nameIsProfane = filter.containsProfanity(submission.user_name);
+
+  console.log(`${submission.user_name} is profane: ${nameIsProfane}`);
 
   const valid = submissionSchema.validate(submission);
-  if (valid) {
+  console.log({ valid });
+
+  if (!valid.error && !nameIsProfane) {
+    // insert result into db
+    await collection.insertOne(submission);
+
     return {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       statusCode: 200,
       body: JSON.stringify({
         message: `Go Serverless v1.0!`,
@@ -47,6 +79,10 @@ export const handleResult = async (event, context) => {
     };
   } else {
     return {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       statusCode: 400,
       body: JSON.stringify({
         message: "Saaaaad Panda!!!",

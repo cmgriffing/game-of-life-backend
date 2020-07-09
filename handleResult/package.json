@@ -8,10 +8,10 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "mongodb": "^3.5.8"
+    "mongodb": "^3.5.8",
+    "cellulelife-bad-words": "1.0.4"
   }
 }

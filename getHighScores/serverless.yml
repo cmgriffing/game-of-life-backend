@@ -1,3 +1,5 @@
+org: cmgriffing
+app: gameoflife
 service:
   name: game-of-life-get-high-scores
 
@@ -11,14 +13,9 @@ provider:
   runtime: nodejs12.x
   stage: prod
   region: us-west-2
-
-  functions:
-    getHighScores:
-      handler: handler.getHighScores
-      events:
-        - http:
-            path: get-high-scores
-            method: get
+  memorySize: 256
+  timeout: 3
+  reservedConcurrency: 1
 
 functions:
   getHighScores:
@@ -27,3 +24,4 @@ functions:
       - http:
           path: get-high-scores
           method: get
+          cors: true
