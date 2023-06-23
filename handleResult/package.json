@@ -11,7 +11,7 @@
   "devDependencies": {},
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "mongodb": "^3.5.8",
+    "mongodb": "^3.7.4",
     "cellulelife-bad-words": "1.0.4"
   }
 }
