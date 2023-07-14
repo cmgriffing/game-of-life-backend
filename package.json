@@ -19,7 +19,7 @@
     "serverless-bundle": "^1.7.0",
     "serverless-cloudflare-workers": "^1.2.0",
     "serverless-dotenv-plugin": "^2.4.2",
-    "serverless-offline": "^6.3.1",
+    "serverless-offline": "^12.0.4",
     "serverless-webpack": "^5.3.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
